@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { useDataContext } from './DataContext';
+import * as Babel from '@babel/standalone';
+
 
 const DynamicComponentCreator = ({ jsxString }) => {
   const [DynamicComponent, setDynamicComponent] = useState(null);
@@ -16,10 +19,10 @@ const DynamicComponentCreator = ({ jsxString }) => {
           return ${transformedCode}
           //return MyCounter;
         `;
-        const ComponentFunction = new Function('React', 'useState', functionBody);
+        const ComponentFunction = new Function('React', 'useState', 'useDataContext', functionBody);
 
         // Create the component
-        const CreatedComponent = ComponentFunction(React, useState);
+        const CreatedComponent = ComponentFunction(React, useState, useDataContext);
         setDynamicComponent(() => CreatedComponent);
       } catch (error) {
         console.error('Error creating component:', error);
@@ -35,7 +38,7 @@ const DynamicComponentCreator = ({ jsxString }) => {
 // Usage
 const App = () => {
 
-    const [jsxCode, setJsxCode] = useState(null);
+    const [jsxCode, setJsxCode] = useState('');
 
   const jsxString = `
     function MyInput() {
