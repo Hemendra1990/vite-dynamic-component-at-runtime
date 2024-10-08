@@ -1,0 +1,57 @@
+import React, { useEffect, useState } from 'react';
+
+const App = () => {
+  const [jsxCode, setJsxCode] = useState('<div><h1>Hello, Babel Standalone!</h1></div>');
+  const [compiledComponent, setCompiledComponent] = useState(null);
+
+  useEffect(() => {
+    // Compile the JSX code
+    const compileJsx = () => {
+      try {
+        // Wrap the JSX code inside a component definition
+        const componentCode = `
+          function MyComponent() {
+            return (${jsxCode});
+          }
+        `;
+
+        const transformedCode = Babel.transform(componentCode, {
+          presets: ['react'],
+        }).code;
+
+        // Create a new function from the compiled code
+        const componentFunction = new Function(
+          'React',
+          `${transformedCode}; return MyComponent;`
+        )(React);
+
+        // Set the compiled component function
+        setCompiledComponent(() => componentFunction);
+      } catch (error) {
+        console.error('Compilation error:', error);
+      }
+    };
+
+    compileJsx();
+  }, [jsxCode]);
+
+  return (
+    <div>
+      <h2>Dynamic JSX Compilation with Babel Standalone</h2>
+      <div>
+        <textarea
+          value={jsxCode}
+          onChange={(e) => setJsxCode(e.target.value)}
+          rows="5"
+          cols="50"
+        />
+      </div>
+      {new Date().toLocaleTimeString()}
+      <div>
+        {compiledComponent ? React.createElement(compiledComponent) : null}
+      </div>
+    </div>
+  );
+};
+
+export default App;
