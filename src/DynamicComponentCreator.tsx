@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDataContext } from './DataContext';
 import * as Babel from '@babel/standalone';
+import { PC } from './PC';
 import { primeComponents } from './PrimeComponents';
 const DynamicComponentCreator = ({ jsxString }: { jsxString: string}) => {
     const [DynamicComponent, setDynamicComponent] = useState<any>(null);
