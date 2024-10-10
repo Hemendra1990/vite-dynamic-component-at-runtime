@@ -118,6 +118,7 @@ import { useFavicon } from 'primereact/hooks';
 import { usePrevious } from 'primereact/hooks';
 import { useLocalStorage } from 'primereact/hooks';
 import { useSessionStorage } from 'primereact/hooks';
+import { classNames } from 'primereact/utils';
 
 
 export const primeComponents = {
@@ -242,5 +243,6 @@ export const primeComponents = {
    ConfirmDialog, // For <ConfirmDialog /> component
    confirmDialog, // For confirmDialog method
    TriStateCheckbox,
-   ToggleButton
+   ToggleButton,
+   classNames,
 };

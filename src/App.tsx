@@ -3,6 +3,11 @@ import DynamicComponentCreator from './DynamicComponentCreator';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
+import { InputText } from 'primereact/inputtext';
+
+const getId = () => {
+  return window.crypto.randomUUID();
+}
 
 // Usage
 const App = () => {
@@ -23,6 +28,13 @@ const App = () => {
             <div className='col-12'>
               <h1 className='text-lg'>Kevit's Dynamic Component Creator</h1>
             </div>
+              <div className='col-1'>
+                <label>ID</label>
+              </div>
+              <div className='col-11'>
+                <InputText className='w-full' value={getId()} onChange={() => {}} readOnly={true} disabled={true}/>
+              </div>
+            
             <div className='col-12'>
                 <InputTextarea
                     value={jsxCode}
@@ -32,8 +44,10 @@ const App = () => {
                 />
             </div>
             
-            <div className='col-12'>
-              <Button severity="help" label='Create Component' onClick={() => setRenderComponent(true)} />
+            <div className='col-12 '>
+              <Button className='pr-8 mr-2' severity="contrast" label='Save Component' onClick={() => setRenderComponent(true)} />
+              <Button className='pr-8 mr-2' severity="info" label='Save & Create New Component' onClick={() => setRenderComponent(true)} />
+              <Button severity="help" label='Save & Render Component' onClick={() => setRenderComponent(true)} />
             </div>
 
             <Divider />
