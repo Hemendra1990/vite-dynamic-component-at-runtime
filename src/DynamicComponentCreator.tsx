@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import { useDataContext } from './DataContext';
 import * as Babel from '@babel/standalone';
 import { primeComponents } from './PrimeComponents';
@@ -21,7 +21,7 @@ const DynamicComponentCreator = ({ jsxString }: { jsxString: string}) => {
                 if(!transformedCode.includes('function') ) {
                     setDynamicComponent(() => {
                         return function() {
-                            return new Function('React', 'useState', 'useDataContext', 'uc', `return ${transformedCode}`)(React, useState, useDataContext, primeComponents);
+                            return new Function('React', 'useState', 'useDataContext', 'uc', 'useRef', 'useImperativeHandle', 'useCallback', 'useMemo', `return ${transformedCode}`)(React, useState, useDataContext, primeComponents, useRef, useImperativeHandle, useCallback, useMemo);
                         }
                     });
                     setSyntaxError('');
@@ -33,8 +33,8 @@ const DynamicComponentCreator = ({ jsxString }: { jsxString: string}) => {
                     return ${transformedCode}
                 `;
                 try {
-                    const ComponentFunction = new Function('React', 'useState', 'useDataContext', 'uc', functionBody);
-                    const CreatedComponent = ComponentFunction(React, useState, useDataContext, primeComponents);
+                    const ComponentFunction = new Function('React', 'useState', 'useDataContext', 'uc', 'useRef', 'useImperativeHandle', 'useCallback', 'useMemo',  functionBody);
+                    const CreatedComponent = ComponentFunction(React, useState, useDataContext, primeComponents, useRef, useImperativeHandle, useCallback, useMemo);
                     setDynamicComponent(() => CreatedComponent);
                 } catch (error) {
                     setDynamicComponent(() => '<span>There is a problem with your code ${error?.message}</span>');
