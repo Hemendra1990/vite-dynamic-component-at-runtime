@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDataContext } from './DataContext';
 import * as Babel from '@babel/standalone';
-import { PC } from './PC';
 import { primeComponents } from './PrimeComponents';
 const DynamicComponentCreator = ({ jsxString }: { jsxString: string}) => {
     const [DynamicComponent, setDynamicComponent] = useState<any>(null);
@@ -22,7 +21,7 @@ const DynamicComponentCreator = ({ jsxString }: { jsxString: string}) => {
                 if(!transformedCode.includes('function') ) {
                     setDynamicComponent(() => {
                         return function() {
-                            return new Function('React', 'useState', 'useDataContext', 'primeComponents', `return ${transformedCode}`)(React, useState, useDataContext, primeComponents);
+                            return new Function('React', 'useState', 'useDataContext', 'uc', `return ${transformedCode}`)(React, useState, useDataContext, primeComponents);
                         }
                     });
                     setSyntaxError('');
@@ -34,7 +33,7 @@ const DynamicComponentCreator = ({ jsxString }: { jsxString: string}) => {
                     return ${transformedCode}
                 `;
                 try {
-                    const ComponentFunction = new Function('React', 'useState', 'useDataContext', 'primeComponents', functionBody);
+                    const ComponentFunction = new Function('React', 'useState', 'useDataContext', 'uc', functionBody);
                     const CreatedComponent = ComponentFunction(React, useState, useDataContext, primeComponents);
                     setDynamicComponent(() => CreatedComponent);
                 } catch (error) {
