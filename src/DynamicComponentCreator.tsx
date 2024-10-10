@@ -1,10 +1,14 @@
 
 import { useEffect, useState } from 'react';
 import useDynamicComponentCreatorHook from './CreateComponentHook';
+
+
+
 const DynamicComponentCreator = ({ jsxString }: { jsxString: string }) => {
     const [DynamicComponent, setDynamicComponent] = useState<any>(null);
     const [syntaxError, setSyntaxError] = useState<string>('');
     const { createComponent: createMainComp } = useDynamicComponentCreatorHook(jsxString);
+    
     useEffect(() => {
         try {
             const component = createMainComp();
@@ -18,6 +22,7 @@ const DynamicComponentCreator = ({ jsxString }: { jsxString: string }) => {
     if (syntaxError.length > 0) {
         return <div>{syntaxError}</div>
     }
+
     return DynamicComponent ? <DynamicComponent /> : null;
 };
 

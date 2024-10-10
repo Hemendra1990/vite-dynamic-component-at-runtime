@@ -4,15 +4,23 @@ import { InputTextarea } from 'primereact/inputtextarea';
 import { Button } from 'primereact/button';
 import { Divider } from 'primereact/divider';
 import { InputText } from 'primereact/inputtext';
+import { DataContextType, useDataContext } from './DataContext';
+import RenderSavedComponents from './RenderSavedComponents';
 
 const getId = () => {
   return window.crypto.randomUUID();
 }
 
+type SaveType = 'save' | 'saveAndRender' | null;
+
 // Usage
 const App = () => {
     const [renderComponent, setRenderComponent] = useState<boolean>(false);
     const [jsxCode, setJsxCode] = useState<string>('');
+    const [componentName, setComponentName] = useState<string>('');
+
+    const [saveType, setSaveType] = useState<SaveType>(null);
+
     const jsxString = `
     function MyInput() {
       const [name, setName] = useState("Hello")
@@ -29,10 +37,10 @@ const App = () => {
               <h1 className='text-lg'>Kevit's Dynamic Component Creator</h1>
             </div>
               <div className='col-1'>
-                <label>ID</label>
+                <label>Name</label>
               </div>
               <div className='col-11'>
-                <InputText className='w-full' value={getId()} onChange={() => {}} readOnly={true} disabled={true}/>
+                <InputText className='w-full' value={componentName} onChange={(e) => setComponentName(e.target.value)} />
               </div>
             
             <div className='col-12'>
@@ -45,14 +53,22 @@ const App = () => {
             </div>
             
             <div className='col-12 '>
-              <Button className='pr-8 mr-2' severity="contrast" label='Save Component' onClick={() => setRenderComponent(true)} />
-              <Button className='pr-8 mr-2' severity="info" label='Save & Create New Component' onClick={() => setRenderComponent(true)} />
-              <Button severity="help" label='Save & Render Component' onClick={() => setRenderComponent(true)} />
+
+              <Button severity="success" label='Save & Render Component' 
+                onClick={() => {
+                  const id = getId();
+                  localStorage.setItem("id", id);
+                  localStorage.setItem("currentComponentName", componentName);
+                  setSaveType('save');
+                  setRenderComponent(true);
+              }} />
             </div>
 
             <Divider />
 
             {renderComponent && <div className='col-12'><DynamicComponentCreator jsxString={jsxCode} /></div>}
+
+            <RenderSavedComponents />
 
         </div>
     );

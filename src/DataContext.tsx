@@ -1,6 +1,6 @@
 import { createContext, useContext, useState } from "react";
 
-type DataContextType = {
+export type DataContextType = {
     [key: string]: any
 };
 
